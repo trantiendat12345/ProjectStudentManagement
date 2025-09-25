@@ -1,0 +1,217 @@
+📘 Tài liệu chức năng hệ thống Quản lý sinh viên (Chi tiết)
+	1. Quản lý người dùng & phân quyền (Accounts & Roles)
+		Người dùng liên quan: Admin, tất cả người dùng.
+		Chức năng:
+			Đăng nhập/Đăng xuất
+			Người dùng nhập tên đăng nhập/email + mật khẩu.
+			Hệ thống kiểm tra tính hợp lệ → cho phép truy cập.
+			Lưu log thời điểm đăng nhập, IP, thiết bị.
+		Phân quyền
+			Admin gán vai trò: Admin, Giảng viên, Sinh viên, Kế toán, Quản lý khoa…
+			Mỗi vai trò có tập quyền riêng (vd: Sinh viên không thể xem log hệ thống).
+		Quản lý tài khoản
+			Tạo mới người dùng, sửa thông tin (email, số điện thoại).
+			Khóa tài khoản (is_active = false).
+			Xóa mềm (deleted_at, deleted_by).
+		Đặt lại mật khẩu
+			Người dùng có thể đổi mật khẩu.
+			Admin reset mật khẩu cho SV/GV.
+		Lịch sử đăng nhập
+			Xem danh sách log đăng nhập/đăng xuất, địa chỉ IP.
+
+===================================================================================================
+			
+	2. Quản lý giảng viên (Teachers)
+		Người dùng liên quan: Admin, Quản lý khoa.
+		Chức năng:
+			Quản lý thông tin giảng viên: mã GV, họ tên, giới tính, email, khoa.
+			Phân công giảng dạy: gán môn học/lớp học phần cho giảng viên.
+			Xem danh sách lớp đang phụ trách.
+			Quản lý giảng viên thuộc nhiều khoa/ngành (nếu trường tổ chức như vậy).
+			Xuất báo cáo: thống kê giảng viên dạy bao nhiêu lớp, bao nhiêu SV.
+
+===================================================================================================
+			
+	3. Quản lý sinh viên (Students)
+		Người dùng liên quan: Admin, Quản lý khoa, Giảng viên cố vấn, Sinh viên.
+		Chức năng:
+		Quản lý hồ sơ: mã SV, họ tên, ngày sinh, giới tính, email, lớp, ngành, khóa.
+		Trạng thái: Đang học, Bảo lưu, Thôi học, Tốt nghiệp.
+		Theo dõi tiến độ:
+			Tổng tín chỉ đã tích lũy.
+			Môn học đã đạt/chưa đạt.
+			GPA theo kỳ, GPA toàn khóa.
+		Lịch sử học tập: các môn đã đăng ký, điểm từng môn.
+		Quản lý cố vấn học tập: SV thuộc quản lý của GV nào.
+		Báo cáo học vụ: danh sách SV có nguy cơ cảnh báo (nợ quá nhiều môn, GPA thấp).
+
+===================================================================================================
+			
+	4. Quản lý khoa, ngành, lớp (Departments, Majors, Classes)
+		Người dùng liên quan: Admin, Quản lý khoa.
+		Chức năng:
+			Quản lý khoa/phòng ban: tên, mã khoa, trưởng khoa.
+			Quản lý ngành học: tên ngành, mã ngành, thuộc khoa nào.
+			Quản lý lớp sinh viên (cohort): mã lớp, khóa học (K66, K67…), ngành học, năm nhập học.
+			Quản lý giảng viên cố vấn của lớp.
+			Xuất danh sách SV theo khoa, ngành, lớp, khóa.
+
+===================================================================================================
+			
+	5. Quản lý môn học & giảng dạy (Subjects, Teaching, Class Sections)
+		Người dùng liên quan: Admin, Giảng viên, Sinh viên.
+		Chức năng:
+			Quản lý môn học: mã môn, tên môn, tín chỉ, mô tả.
+			Điều kiện tiên quyết: quy định môn A phải học trước môn B.
+			Tạo lớp học phần (theo kỳ học): gắn môn học, giảng viên, lịch học.
+			Quản lý thời khóa biểu: ngày trong tuần, ca học, phòng học.
+			Kiểm tra trùng lịch: hệ thống cảnh báo nếu SV đăng ký 2 lớp trùng giờ.
+
+===================================================================================================
+			
+	6. Đăng ký học phần & quản lý điểm (Enrollments, Grades)
+		Người dùng liên quan: Sinh viên, Giảng viên, Admin.
+		Chức năng:
+			Sinh viên đăng ký môn học trong kỳ: hệ thống kiểm tra số tín chỉ, điều kiện tiên quyết, trùng lịch.
+			Hủy đăng ký: SV có thể rút môn trong thời gian cho phép.
+			Nhập điểm: giảng viên nhập điểm chuyên cần, giữa kỳ, cuối kỳ.
+			Trọng số điểm: hệ thống tính điểm cuối cùng dựa trên % (ví dụ: 30% giữa kỳ + 70% cuối kỳ).
+			Phúc khảo điểm: SV gửi yêu cầu, giảng viên xem xét và cập nhật.
+			Thống kê điểm: GPA cá nhân, GPA toàn lớp.
+
+===================================================================================================
+			
+	7. Quản lý phòng học (Rooms)
+		Người dùng liên quan: Admin, Quản lý đào tạo.
+		Chức năng:
+			Quản lý danh sách phòng học: mã phòng, tòa nhà, sức chứa, loại phòng (LT, Lab, Hội trường).
+			Phân bổ phòng: gán phòng cho lớp học phần.
+			Kiểm tra trùng phòng: cảnh báo nếu 2 lớp sử dụng cùng phòng cùng giờ.
+			Báo cáo: tỷ lệ sử dụng phòng học, phòng còn trống.
+
+===================================================================================================
+			
+	8. Quản lý học phí & thanh toán (Payments)
+		Người dùng liên quan: Sinh viên, Kế toán, Admin.
+		Chức năng:
+			Quản lý khoản phí: học phí theo tín chỉ/kỳ học, các khoản phí dịch vụ khác.
+			Lập hóa đơn/biên lai: số tiền, ngày thanh toán, phương thức (tiền mặt, chuyển khoản).
+			Quản lý tình trạng: đã thanh toán, còn nợ, trả góp.
+			Liên kết với kỳ học: SV phải hoàn thành học phí để được đăng ký môn.
+			Xuất báo cáo tài chính: danh sách SV còn nợ học phí.
+
+===================================================================================================
+			
+	9. Nhật ký hệ thống & theo dõi thay đổi (Audit Logs)
+		Người dùng liên quan: Admin.
+		Chức năng:
+			Ghi log hoạt động: đăng nhập, đăng xuất, thêm/sửa/xóa dữ liệu.
+			Lưu dữ liệu cũ và mới (JSON).
+			Phân loại hành động: Login, Logout, Create, Update, Delete, Payment.
+			Truy xuất log: tìm kiếm theo user, bảng, loại hành động, thời gian.
+			Xuất báo cáo log (Excel/PDF).
+
+===================================================================================================
+			
+	10. Chức năng nâng cao (Reports & Analytics)
+		Người dùng liên quan: Admin, Quản lý khoa, Giảng viên.
+		Chức năng:
+			Báo cáo học tập: tỷ lệ SV qua môn, GPA trung bình, số môn nợ.
+			Báo cáo giảng viên: số lớp giảng dạy, số SV phụ trách, tỷ lệ điểm trung bình.
+			Thống kê phòng học: mức độ sử dụng, phòng trống.
+			Phát hiện trùng lịch: cảnh báo khi SV đăng ký môn hoặc khi xếp phòng học.
+			Trạng thái SV: lọc SV có nguy cơ cảnh báo học vụ (nợ > 10 tín chỉ, GPA < 2.0).
+			Xuất báo cáo: cho phép xuất Excel, PDF để in ấn.
+
+
+================================================================================================================================================================================================
+
+1. Quản lý người dùng & phân quyền
+Bảng liên quan: Accounts, Roles, Audit_Logs
+Chức năng:
+Tạo tài khoản mới (Admin tạo tài khoản cho giảng viên/sinh viên).
+Phân quyền tài khoản (role_id → Roles.role_name).
+Đăng nhập, đăng xuất.
+Kích hoạt/Vô hiệu hóa (is_active).
+Xóa mềm (is_deleted, deleted_by, deleted_at).
+Lưu lịch sử hoạt động (Audit Logs: đăng nhập, đổi mật khẩu, cập nhật tài khoản).
+📌 Ví dụ: Admin tạo tài khoản cho SV, role = student, gắn với Students.id.
+2. Quản lý giảng viên (Teachers)
+Bảng liên quan: Teachers, Accounts, Majors, Departments
+Chức năng:
+Thêm/Cập nhật/Xóa giảng viên.
+Thông tin cá nhân: mã GV, tên, email, bộ môn, tình trạng (đang dạy/nghỉ hưu).
+Liên kết với ngành (major_id) → thuộc khoa (department_id).
+Liên kết tài khoản (nếu có: Accounts.teacher_id).
+Gán làm cố vấn học tập cho sinh viên (Students.advisor_id).
+📌 Ví dụ: GV Nguyễn Văn B (CNTT) được gán làm advisor cho SV A.
+3. Quản lý sinh viên (Students)
+Bảng liên quan: Students, Student_Classes, Majors, Departments, Teachers, Accounts
+Chức năng:
+Thêm/Cập nhật/Xóa sinh viên.
+Quản lý thông tin: mã SV, lớp (class_id), ngành, khoa, email, số ĐT.
+Quản lý tình trạng (status: active, graduated, suspended, dropped).
+Theo dõi lớp sinh viên (class_id → Student_Classes).
+Gán giảng viên cố vấn (advisor_id).
+Liên kết với tài khoản (Accounts.student_id).
+📌 Ví dụ: SV Lê Văn A → lớp CS2025, ngành CNTT, advisor: GV Nguyễn Văn B.
+4. Quản lý Khoa – Ngành – Lớp
+Bảng liên quan: Departments, Majors, Student_Classes
+Chức năng:
+Quản lý khoa (Departments).
+Quản lý ngành học (Majors.department_id → Departments).
+Quản lý lớp sinh viên (Student_Classes.major_id → Majors).
+Gán cố vấn học tập cho lớp (qua bảng Students).
+📌 Ví dụ: Lớp CS2025 → ngành CNTT → khoa Công nghệ thông tin.
+5. Quản lý môn học & giảng dạy
+Bảng liên quan: Subjects, Teaching, Class_Sections, Class_Schedules, Rooms, Academic_Terms
+Chức năng:
+Quản lý môn học (Subjects: mã môn, tên môn, tín chỉ).
+Phân công giảng viên dạy môn (Teaching.teacher_id, subject_id, term_id).
+Tạo lớp học phần (Class_Sections): môn, giảng viên, học kỳ, phòng, sức chứa.
+Quản lý lịch học (Class_Schedules): ngày, giờ, phòng học.
+Kiểm tra trùng lịch, trùng phòng.
+📌 Ví dụ: Môn Database → GV A dạy học kỳ Fall 2025 → tạo 2 lớp học phần → lịch học thứ 2-4, phòng B101.
+6. Đăng ký học phần & Quản lý điểm
+Bảng liên quan: Enrollments, Grade_Components, Assessment_Weights, Class_Sections
+Chức năng:
+Đăng ký học phần (SV chọn lớp → lưu vào Enrollments.status = registered).
+Hủy đăng ký (status = cancelled).
+Quản lý điểm thành phần (Grade_Components: midterm, final, assignment...).
+Quản lý trọng số (Assessment_Weights: midterm 30%, final 70%).
+Tính điểm tổng kết dựa trên trọng số.
+Theo dõi trạng thái đăng ký: registered, waitlist, cancelled.
+📌 Ví dụ: SV A đăng ký môn Database → Midterm = 8.5, Final = 9.0 → tổng điểm = 8.85.
+7. Quản lý phòng học (Rooms)
+Bảng liên quan: Rooms, Class_Sections, Class_Schedules
+Chức năng:
+Quản lý danh sách phòng (tòa nhà, số phòng, sức chứa).
+Gán phòng cho lớp học phần (Class_Sections.room_id).
+Quản lý lịch phòng học (Class_Schedules.room_id).
+Kiểm tra trùng phòng (phòng B101 không thể cho 2 lớp cùng giờ).
+📌 Ví dụ: Phòng B101 có sức chứa 60, gán cho lớp DB Section 1 thứ 2-4 8h-10h.
+8. Quản lý học phí (Payments)
+Bảng liên quan: Payments, Students
+Chức năng:
+Quản lý học phí từng kỳ.
+Ghi nhận các khoản thanh toán (amount, status, paid_at).
+Liên kết sinh viên (Payments.student_id).
+Theo dõi tình trạng: pending, paid, overdue.
+📌 Ví dụ: SV A đóng học phí 5 triệu, trạng thái = paid, paid_at = 2025-09-10.
+9. Audit Logs – Nhật ký hệ thống
+Bảng liên quan: Audit_Logs, Accounts
+Chức năng:
+Lưu lịch sử thao tác: bảng nào, record nào, hành động gì.
+Lưu dữ liệu cũ (old_data) và mới (new_data).
+Liên kết người thực hiện (account_id, created_by).
+Hỗ trợ truy xuất khi cần kiểm tra.
+📌 Ví dụ: Admin xóa môn Database → log lưu thông tin môn trước khi xóa.
+10. Chức năng nâng cao (Báo cáo & Thống kê)
+Tổng hợp từ nhiều bảng:
+Danh sách SV theo lớp/ngành (Students + Student_Classes + Majors).
+Điểm trung bình (GPA) theo kỳ/toàn khóa (Enrollments + Grade_Components + Assessment_Weights).
+Báo cáo giảng viên: số môn, số SV, lịch dạy (Teaching + Class_Sections).
+Báo cáo phòng học: tỷ lệ sử dụng (Class_Schedules + Rooms).
+Báo cáo học phí: SV đã nộp/chưa nộp (Payments).
+Phát hiện SV nguy cơ học vụ: GPA thấp, nợ nhiều môn.
+📌 Ví dụ: Xuất báo cáo danh sách SV năm 2025 ngành CNTT kèm GPA.

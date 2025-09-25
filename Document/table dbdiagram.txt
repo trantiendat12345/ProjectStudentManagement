@@ -1,0 +1,328 @@
+table Roles {
+  id Long [primary key]
+  role_name varchar
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Accounts {
+  id Long [primary key]
+  username varchar
+  password varchar
+  role_id Long
+  student_id Long
+  teacher_id Long
+  is_active tinyint
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Academic_Terms {
+  id Long [primary key]
+  year int
+  semester enum
+  start_date date
+  end_date date
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Rooms {
+  id Long [primary key]
+  building varchar
+  room_number varchar
+  capacity int
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Departments {
+  id Long [primary key]
+  department_name varchar
+  note text
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Majors {
+  id Long [primary key]
+  department_id Long
+  major_name varchar
+  note text
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Student_Classes {
+  id Long [primary key]
+  major_id Long
+  class_name varchar
+  academic_year varchar
+  note text
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Teachers {
+  id Long [primary key]
+  teacher_code varchar
+  major_id Long
+  full_name varchar
+  gender enum
+  date_of_birth date
+  email varchar
+  identity_number varchar
+  phone varchar
+  address text
+  image_url varchar
+  status enum
+  note text
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Students {
+  id Long [primary key]
+  student_code varchar
+  class_id Long 
+  full_name varchar
+  gender enum
+  date_of_birth date
+  email varchar
+  identity_number varchar
+  phone varchar
+  address text
+  image_url varchar
+  academic_year varchar
+  status enum
+  advisor_id Long
+  note text
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Subjects {
+  id Long [primary key]
+  subject_code varchar
+  subject_name varchar
+  credit smallint
+  note text
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Teaching {
+  id Long [primary key]
+  teacher_id Long
+  subject_id Long
+  term_id Long
+  note text
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Class_Sections {
+  id Long [primary key]
+  subject_id Long 
+  teacher_id Long
+  term_id Long
+  room_id Long
+  max_student int
+  schedule varchar
+  note text
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Class_Schedules {
+  id Long [primary key]
+  class_section_id Long 
+  day_of_week tinyint
+  start_time time
+  end_time time
+  room_id Long
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Enrollments {
+  id Long [primary key]
+  student_id Long
+  class_section_id Long
+  status enum
+  note text
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Grade_Components {
+  id Long [primary key]
+  enrollment_id Long
+  component varchar
+  score decimal
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Assessment_Weights {
+  id Long [primary key]
+  class_section_id Long
+  component varchar
+  weight decimal
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Payments {
+  id Long [primary key]
+  student_id Long 
+  amount decimal
+  description text
+  status enum
+  paid_at timestamp
+  is_deleted tinyint
+  deleted_at timestamp
+  deleted_by Long
+  created_at timestamp
+  updated_at timestamp
+}
+
+table Audit_Logs {
+  id Long [primary key]
+  account_id Long
+  action varchar
+  table_name varchar
+  record_id Long
+  old_data Json
+  new_data Json
+  created_at timestamp
+  created_by Long
+}
+
+Ref: Accounts.role_id > Roles.id
+
+Ref: Accounts.deleted_by - Accounts.id
+
+Ref: Accounts.student_id - Students.id
+
+Ref: Accounts.teacher_id - Teachers.id
+
+Ref: Academic_Terms.deleted_by - Accounts.id
+
+Ref: Rooms.deleted_by - Accounts.id
+
+Ref: Departments.deleted_by - Accounts.id
+
+Ref: Majors.department_id > Departments.id
+
+Ref: Majors.deleted_by - Accounts.id
+
+Ref: Student_Classes.major_id > Majors.id
+
+Ref: Student_Classes.deleted_by - Accounts.id
+
+Ref: Teachers.major_id > Majors.id
+
+Ref: Teachers.deleted_by - Accounts.id
+
+Ref: Students.class_id > Student_Classes.id
+
+Ref: Students.advisor_id > Teachers.id
+
+Ref: Students.deleted_by - Accounts.id
+
+Ref: Subjects.deleted_by - Accounts.id
+
+Ref: Teaching.teacher_id > Teachers.id
+
+Ref: Teaching.subject_id > Subjects.id
+
+Ref: Teaching.term_id > Academic_Terms.id
+
+Ref: Teaching.deleted_by - Accounts.id
+
+Ref: Class_Sections.subject_id > Subjects.id
+
+Ref: Class_Sections.teacher_id > Teachers.id
+
+Ref: Class_Sections.term_id > Academic_Terms.id
+
+Ref: Class_Sections.room_id > Rooms.id
+
+Ref: Class_Sections.deleted_by - Accounts.id
+
+Ref: Class_Schedules.class_section_id > Class_Sections.id
+
+Ref: Class_Schedules.room_id > Rooms.id
+
+Ref: Class_Schedules.deleted_by - Accounts.id
+
+Ref: Enrollments.student_id > Students.id
+
+Ref: Enrollments.class_section_id > Class_Sections.id
+
+Ref: Enrollments.deleted_by - Accounts.id
+
+Ref: Grade_Components.enrollment_id > Enrollments.id
+
+Ref: Grade_Components.deleted_by - Accounts.id
+
+Ref: Assessment_Weights.class_section_id > Class_Sections.id
+
+Ref: Assessment_Weights.deleted_by - Accounts.id
+
+Ref: Payments.student_id > Students.id
+
+Ref: Payments.deleted_by - Accounts.id
+
+Ref: Audit_Logs.created_by > Accounts.id
+
+Ref: Audit_Logs.account_id > Accounts.id

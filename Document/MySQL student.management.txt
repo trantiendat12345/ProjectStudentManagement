@@ -1,0 +1,470 @@
+†-- =========================================
+-- DATABASE: Student Management System (Final, all deleted_by -> accounts)
+-- Author: ChatGPT (finalized)
+-- Engine: MySQL 8.x (InnoDB, utf8mb4)
+-- Note: run on MySQL 8.0+
+-- =========================================
+
+CREATE DATABASE IF NOT EXISTS student_management
+  DEFAULT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+USE student_management;
+
+-- =========================
+-- 1) Roles (create first)
+-- =========================
+CREATE TABLE IF NOT EXISTS `roles` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `role_name` VARCHAR(50) NOT NULL,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_role_name` (`role_name`),
+  KEY `idx_roles_is_deleted` (`is_deleted`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 2) Accounts (create now but add student/teacher FKs later)
+--    - accounts references roles (roles exists)
+--    - do NOT add fk_account_student / fk_account_teacher here to avoid circular FK
+-- =========================
+CREATE TABLE IF NOT EXISTS `accounts` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(100) NOT NULL,
+  `password_hash` VARCHAR(255) NOT NULL,
+  `role_id` INT NOT NULL,
+  `student_id` BIGINT UNSIGNED, -- FK added later
+  `teacher_id` BIGINT UNSIGNED, -- FK added later
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_username` (`username`),
+  KEY `idx_accounts_is_deleted` (`is_deleted`),
+  KEY `idx_account_student` (`student_id`),
+  KEY `idx_account_teacher` (`teacher_id`),
+  CONSTRAINT `fk_accounts_deleted_by` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_account_role` FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE RESTRICT,
+  CONSTRAINT `chk_account_one_user` CHECK (
+    (student_id IS NOT NULL AND teacher_id IS NULL) OR
+    (student_id IS NULL AND teacher_id IS NOT NULL) OR
+    (student_id IS NULL AND teacher_id IS NULL)
+  )
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 3) Academic Terms
+-- =========================
+CREATE TABLE IF NOT EXISTS `academic_terms` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `year` INT NOT NULL,
+  `semester` ENUM('Spring','Summer','Fall') NOT NULL,
+  `start_date` DATE,
+  `end_date` DATE,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_term` (`year`,`semester`),
+  KEY `idx_term_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_term_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 4) Rooms
+-- =========================
+CREATE TABLE IF NOT EXISTS `rooms` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `building` VARCHAR(50) NOT NULL,
+  `room_number` VARCHAR(20) NOT NULL,
+  `capacity` INT,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_room` (`building`,`room_number`),
+  KEY `idx_room_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_room_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 5) Departments
+-- =========================
+CREATE TABLE IF NOT EXISTS `departments` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `department_name` VARCHAR(255) NOT NULL,
+  `note` TEXT,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_department_name` (`department_name`),
+  KEY `idx_department_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_department_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 6) Majors
+-- =========================
+CREATE TABLE IF NOT EXISTS `majors` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `department_id` BIGINT UNSIGNED,
+  `major_name` VARCHAR(255) NOT NULL,
+  `note` TEXT,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_major_name` (`major_name`),
+  KEY `department_id`,
+  KEY `idx_major_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_majors_department` FOREIGN KEY (`department_id`) REFERENCES `departments`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_majors_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 7) Student Classes (cohorts)
+-- =========================
+CREATE TABLE IF NOT EXISTS `student_classes` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `major_id` BIGINT UNSIGNED,
+  `class_name` VARCHAR(100) NOT NULL,
+  `academic_year` VARCHAR(30),
+  `note` TEXT,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_class_name_year` (`class_name`,`academic_year`),
+  KEY `major_id`,
+  KEY `idx_student_classes_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_classes_major` FOREIGN KEY (`major_id`) REFERENCES `majors`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_student_classes_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 8) Teachers
+-- =========================
+CREATE TABLE IF NOT EXISTS `teachers` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `teacher_code` VARCHAR(50) NOT NULL,
+  `major_id` BIGINT UNSIGNED,
+  `full_name` VARCHAR(255) NOT NULL,
+  `gender` ENUM('male','female','other') DEFAULT 'other',
+  `date_of_birth` DATE,
+  `email` VARCHAR(255) NOT NULL,
+  `identity_number` VARCHAR(50) NOT NULL,
+  `phone` VARCHAR(30),
+  `address` TEXT,
+  `image_url` VARCHAR(512),
+  `status` ENUM('active','inactive','retired') DEFAULT 'active',
+  `note` TEXT,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_teacher_code` (`teacher_code`),
+  UNIQUE KEY `uq_teacher_email` (`email`),
+  UNIQUE KEY `uq_teacher_identity_number` (`identity_number`),
+  KEY `major_id`,
+  KEY `idx_teacher_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_teacher_major` FOREIGN KEY (`major_id`) REFERENCES `majors`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_teachers_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 9) Students
+-- =========================
+CREATE TABLE IF NOT EXISTS `students` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `student_code` VARCHAR(50) NOT NULL,
+  `class_id` BIGINT UNSIGNED,
+  `full_name` VARCHAR(255) NOT NULL,
+  `gender` ENUM('male','female','other') DEFAULT 'other',
+  `date_of_birth` DATE,
+  `email` VARCHAR(255) NOT NULL,
+  `identity_number` VARCHAR(50) NOT NULL,
+  `phone` VARCHAR(30),
+  `address` TEXT,
+  `image_url` VARCHAR(512),
+  `academic_year` VARCHAR(30),
+  `status` ENUM('active','inactive','graduated','suspended') DEFAULT 'active',
+  `advisor_id` BIGINT UNSIGNED,
+  `note` TEXT,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_student_code` (`student_code`),
+  UNIQUE KEY `uq_student_email` (`email`),
+  UNIQUE KEY `uq_student_identity_number` (`identity_number`),
+  KEY `class_id`,
+  KEY `advisor_id`,
+  KEY `idx_student_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_student_class` FOREIGN KEY (`class_id`) REFERENCES `student_classes`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_student_advisor` FOREIGN KEY (`advisor_id`) REFERENCES `teachers`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_students_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 10) Subjects
+-- =========================
+CREATE TABLE IF NOT EXISTS `subjects` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `subject_code` VARCHAR(50) NOT NULL,
+  `subject_name` VARCHAR(255) NOT NULL,
+  `credit` SMALLINT UNSIGNED NOT NULL DEFAULT 2,
+  `note` TEXT,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_subject_code` (`subject_code`),
+  UNIQUE KEY `uq_subject_name` (`subject_name`),
+  KEY `idx_subject_is_deleted` (`is_deleted`),
+  CONSTRAINT `chk_subject_credit` CHECK (`credit` > 0),
+  CONSTRAINT `fk_subjects_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 11) Teaching (assignments)
+-- =========================
+CREATE TABLE IF NOT EXISTS `teaching` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `teacher_id` BIGINT UNSIGNED NOT NULL,
+  `subject_id` BIGINT UNSIGNED NOT NULL,
+  `term_id` BIGINT UNSIGNED NOT NULL,
+  `note` TEXT,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_teaching_teacher_subject` (`teacher_id`,`subject_id`,`term_id`),
+  KEY (`teacher_id`),
+  KEY (`subject_id`),
+  KEY (`term_id`),
+  KEY `idx_teaching_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_teaching_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `teachers`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_teaching_subject` FOREIGN KEY (`subject_id`) REFERENCES `subjects`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_teaching_term` FOREIGN KEY (`term_id`) REFERENCES `academic_terms`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_teaching_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 12) Class Sections
+-- =========================
+CREATE TABLE IF NOT EXISTS `class_sections` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `subject_id` BIGINT UNSIGNED NOT NULL,
+  `teacher_id` BIGINT UNSIGNED,
+  `term_id` BIGINT UNSIGNED NOT NULL,
+  `room_id` BIGINT UNSIGNED,
+  `max_students` INT DEFAULT 60,
+  `schedule` VARCHAR(255),
+  `note` TEXT,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_class_section` (`subject_id`,`teacher_id`,`term_id`,`room_id`,`schedule`),
+  KEY (`subject_id`),
+  KEY (`teacher_id`),
+  KEY (`term_id`),
+  KEY (`room_id`),
+  KEY `idx_class_sections_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_section_subject` FOREIGN KEY (`subject_id`) REFERENCES `subjects`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_section_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `teachers`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_section_term` FOREIGN KEY (`term_id`) REFERENCES `academic_terms`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_section_room` FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_class_sections_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 13) Class Schedules
+-- =========================
+CREATE TABLE IF NOT EXISTS `class_schedules` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `class_section_id` BIGINT UNSIGNED NOT NULL,
+  `day_of_week` TINYINT NOT NULL, -- 1..7
+  `start_time` TIME NOT NULL,
+  `end_time` TIME NOT NULL,
+  `room_id` BIGINT UNSIGNED,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY (`class_section_id`),
+  KEY `idx_class_schedules_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_schedule_section` FOREIGN KEY (`class_section_id`) REFERENCES `class_sections`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_schedule_room` FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_class_schedules_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 14) Enrollments
+-- =========================
+CREATE TABLE IF NOT EXISTS `enrollments` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `student_id` BIGINT UNSIGNED NOT NULL,
+  `class_section_id` BIGINT UNSIGNED NOT NULL,
+  `status` ENUM('registered','cancelled','waitlist') DEFAULT 'registered',
+  `note` TEXT,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_enrollment_student_section` (`student_id`,`class_section_id`),
+  KEY (`student_id`),
+  KEY (`class_section_id`),
+  KEY `idx_enrollments_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_enroll_student` FOREIGN KEY (`student_id`) REFERENCES `students`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_enroll_section` FOREIGN KEY (`class_section_id`) REFERENCES `class_sections`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_enrollments_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 15) Grade Components
+-- =========================
+CREATE TABLE IF NOT EXISTS `grade_components` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `enrollment_id` BIGINT UNSIGNED NOT NULL,
+  `component` VARCHAR(50) NOT NULL,
+  `score` DECIMAL(5,2) NOT NULL,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_gc_enrollment_component` (`enrollment_id`,`component`),
+  KEY (`enrollment_id`),
+  KEY `idx_gc_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_gc_enrollment` FOREIGN KEY (`enrollment_id`) REFERENCES `enrollments`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `chk_gc_score` CHECK (`score` >= 0 AND `score` <= 100),
+  CONSTRAINT `fk_grade_components_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 16) Assessment Weights
+-- =========================
+CREATE TABLE IF NOT EXISTS `assessment_weights` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `class_section_id` BIGINT UNSIGNED NOT NULL,
+  `component` VARCHAR(50) NOT NULL,
+  `weight` DECIMAL(5,4) NOT NULL,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_aw_section_component` (`class_section_id`,`component`),
+  KEY (`class_section_id`),
+  KEY `idx_aw_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_aw_section` FOREIGN KEY (`class_section_id`) REFERENCES `class_sections`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `chk_aw_weight_range` CHECK (`weight` >= 0 AND `weight` <= 1),
+  CONSTRAINT `fk_aw_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 17) Payments
+-- =========================
+CREATE TABLE IF NOT EXISTS `payments` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `student_id` BIGINT UNSIGNED NOT NULL,
+  `amount` DECIMAL(10,2) NOT NULL,
+  `description` TEXT,
+  `status` ENUM('pending','paid','overdue') DEFAULT 'pending',
+  `paid_at` TIMESTAMP NULL DEFAULT NULL,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_by` BIGINT UNSIGNED NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY (`student_id`),
+  KEY `idx_payments_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_payment_student` FOREIGN KEY (`student_id`) REFERENCES `students`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_payments_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 18) Audit Logs
+-- =========================
+CREATE TABLE IF NOT EXISTS `audit_logs` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `account_id` BIGINT UNSIGNED,
+  `action` VARCHAR(50),
+  `table_name` VARCHAR(50),
+  `record_id` BIGINT,
+  `old_data` JSON,
+  `new_data` JSON,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `created_by` BIGINT UNSIGNED,
+  PRIMARY KEY (`id`),
+  KEY (`account_id`),
+  CONSTRAINT `fk_auditlog_actor` FOREIGN KEY (`created_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_log_account` FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE SET NULL,
+  CONSTRAINT `chk_audit_old_json` CHECK (old_data IS NULL OR JSON_VALID(old_data)),
+  CONSTRAINT `chk_audit_new_json` CHECK (new_data IS NULL OR JSON_VALID(new_data))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
+-- 19) Now add the FK constraints for accounts -> students/teachers
+--     (we postponed these to avoid circular creation)
+-- =========================
+ALTER TABLE `accounts`
+  ADD CONSTRAINT `fk_account_student` FOREIGN KEY (`student_id`) REFERENCES `students`(`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_account_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `teachers`(`id`) ON DELETE SET NULL;
+
+-- End of script
+
+=======================================================================================================
+
+Những lưu ý khi sử dụng script này
+Mình đã đặt deleted_by FK → accounts.id ở tất cả bảng (nếu bảng accounts bị xóa, deleted_by sẽ SET NULL).
+accounts.student_id và accounts.teacher_id FK được thêm sau cùng bằng ALTER TABLE để tránh vòng tham chiếu khi tạo bảng.
+Một số business rule (ví dụ: tổng assessment_weights = 1 cho mỗi class_section) không thể enforce 100% bằng SQL — xử lý trong backend (khi tạo/cập nhật weights).
+password_hash phải lưu hash (bcrypt/argon2) trong accounts.password_hash.
+Soft-delete workflow (backend): khi xóa mềm, cập nhật:
+
+=============================================================================================================
+
+UPDATE students
+SET is_deleted = 1, deleted_at = NOW(), deleted_by = <account_id>
+WHERE id = <student_id>;
+
+=============================================================================================================
+
+Và tương tự cho các bảng khác.
+Khi dùng Hibernate, bạn có thể dùng @Where(clause="is_deleted=0") hoặc global filter để tự động lọc bản ghi đã bị xóa mềm.

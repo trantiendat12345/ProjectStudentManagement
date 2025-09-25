@@ -1,0 +1,63 @@
+🚀 Lộ trình triển khai hệ thống Quản lý sinh viên
+Giai đoạn 1 – Nền tảng & bảo mật
+🔹 Mục tiêu: Có hệ thống cơ bản để đăng nhập, phân quyền, tạo dữ liệu người dùng.
+Chức năng cần làm trước:
+Accounts & Roles (Quản lý người dùng, đăng nhập, phân quyền).
+Audit Logs (Ghi nhận hoạt động).
+Kết quả:
+Hệ thống có cơ chế đăng nhập/đăng xuất, phân quyền Admin – GV – SV.
+Mọi thao tác đều lưu log, giúp dễ debug và quản trị.
+
+====================================================================================
+
+Giai đoạn 2 – Quản lý dữ liệu cốt lõi
+🔹 Mục tiêu: Xây dựng dữ liệu nền của trường để sau này gán vào lớp, môn, SV.
+Chức năng cần làm:
+3. Quản lý Khoa – Ngành – Lớp (Departments, Majors, Classes).
+4. Quản lý Giảng viên (Teachers).
+5. Quản lý Sinh viên (Students).
+Kết quả:
+Có danh sách khoa, ngành, lớp.
+Giảng viên và sinh viên được lưu trữ, gán đúng khoa/ngành/lớp.
+Có thể xuất danh sách SV theo lớp/khoa.
+
+====================================================================================
+
+Giai đoạn 3 – Học tập & giảng dạy
+🔹 Mục tiêu: Cho phép SV đăng ký học và GV giảng dạy.
+Chức năng cần làm:
+6. Quản lý Môn học & Giảng dạy (Subjects, Teaching, Sections, Schedule).
+7. Đăng ký học phần & Quản lý điểm (Enrollments, Grades).
+8. Quản lý phòng học (Rooms).
+Kết quả:
+Có danh sách môn học, lớp học phần, thời khóa biểu.
+SV có thể đăng ký môn học (có kiểm tra trùng lịch, điều kiện tiên quyết).
+GV nhập điểm, hệ thống tính GPA, báo cáo học tập.
+
+====================================================================================
+
+Giai đoạn 4 – Tài chính & Báo cáo nâng cao
+🔹 Mục tiêu: Hoàn thiện hệ thống và thêm tính năng nâng cao.
+Chức năng cần làm:
+9. Quản lý học phí & Thanh toán (Payments).
+10. Báo cáo & Thống kê nâng cao (Reports & Analytics).
+Kết quả:
+Quản lý học phí SV (nợ, đã đóng, biên lai).
+Xuất báo cáo học vụ, tài chính, giảng dạy, phòng học.
+Phát hiện SV có nguy cơ học vụ (GPA thấp, nợ môn).
+
+====================================================================================
+
+📌 Thứ tự ưu tiên trong từng giai đoạn:
+Giai đoạn 1: Bắt buộc làm trước (không có thì không thể login).
+Giai đoạn 2: Xây dựng dữ liệu nền → chuẩn bị cho đăng ký môn.
+Giai đoạn 3: Tập trung vào trải nghiệm học tập thực tế (đăng ký môn, lịch, điểm).
+Giai đoạn 4: Tài chính & báo cáo là bổ sung giá trị, triển khai sau cùng.
+
+====================================================================================
+
+👉 Tóm gọn:
+Bắt đầu từ User & Bảo mật (Accounts, Logs).
+Xây dựng dữ liệu gốc (Khoa, Lớp, GV, SV).
+Chức năng giảng dạy – học tập (Môn, Đăng ký, Lịch, Điểm, Phòng học).
+Hoàn thiện hệ thống (Học phí, Báo cáo nâng cao).

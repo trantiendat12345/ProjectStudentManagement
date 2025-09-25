@@ -1,0 +1,167 @@
+1️⃣ Use Case Diagram (Biểu đồ ca sử dụng)
+📌 Mục đích:
+Thể hiện ai (actor) sẽ làm gì (use case) trong hệ thống.
+Giúp giảng viên thấy bạn đã phân tích đúng đối tượng sử dụng.
+📌 Vẽ cái gì:
+Actor: Sinh viên, Giảng viên, Admin.
+Use case: Đăng nhập, Quản lý sinh viên, Quản lý môn học, Nhập điểm, Xem điểm...
+Mối quan hệ: include / extend nếu cần.
+📌 Công cụ web:
+draw.io (diagrams.net) (miễn phí, dễ dùng).
+Lucidchart (dễ trình bày, free bản cơ bản).
+Visual Paradigm Online (chuẩn UML).
+
+=========================================================================================
+
+2️⃣ Activity Diagram (Biểu đồ hoạt động)
+📌 Mục đích:
+Mô tả luồng xử lý của một chức năng chính.
+Giúp thấy từng bước nghiệp vụ (bắt đầu → xử lý → kết thúc).
+📌 Vẽ cái gì (ví dụ: Đăng nhập):
+Start → nhập tài khoản/mật khẩu → kiểm tra DB → đúng thì vào dashboard, sai thì báo lỗi.
+📌 Công cụ web:
+draw.io
+Lucidchart
+Creately (nhiều template đẹp).
+
+=========================================================================================
+
+3️⃣ ERD (Entity Relationship Diagram – Sơ đồ quan hệ thực thể)
+📌 Mục đích:
+Thể hiện cấu trúc dữ liệu & quan hệ giữa các bảng trong DB.
+Giúp dễ hiểu tại sao thiết kế ra schema đó.
+📌 Vẽ cái gì:
+Bảng (entity): Students, Courses, Teachers, Enrollments...
+Khóa chính (PK), khóa ngoại (FK).
+Quan hệ: 1-1, 1-n, n-n.
+📌 Công cụ web:
+MySQL Workbench (có thể tự generate ERD từ DB).
+dbdiagram.io (trực quan, code → diagram).
+Lucidchart.
+
+=========================================================================================
+
+4️⃣ Class Diagram (Biểu đồ lớp)
+📌 Mục đích:
+Thể hiện các lớp trong hệ thống BE và quan hệ giữa chúng.
+Cho thấy bạn áp dụng OOP + MVC trong Spring Boot.
+📌 Vẽ cái gì:
+Lớp Entity: Student, Course, Teacher, Enrollment.
+Lớp Service: StudentService, CourseService...
+Lớp Controller: StudentController, CourseController...
+Quan hệ: association (sử dụng), dependency, inheritance.
+📌 Công cụ web:
+draw.io
+Lucidchart
+Visual Paradigm Online.
+
+=========================================================================================
+
+5️⃣ Figma (UI Design – Giao diện người dùng)
+📌 Mục đích:
+Thể hiện giao diện FE (Angular sẽ code dựa theo).
+Làm báo cáo nhìn trực quan, hiện đại.
+📌 Vẽ cái gì:
+Màn hình Login.
+Dashboard (menu, sidebar).
+Quản lý sinh viên (list, CRUD form).
+Quản lý môn học.
+Trang nhập/xem điểm.
+📌 Công cụ web:
+Figma (miễn phí bản cơ bản, cực phổ biến).
+Nếu không quen → có thể vẽ sơ trên Canva.
+
+=========================================================================================
+
+6️⃣ Sơ đồ kiến trúc hệ thống (System Architecture Diagram)
+📌 Mục đích:
+Thể hiện cách các thành phần (FE, BE, DB) kết nối.
+Giúp giảng viên thấy bạn hiểu 3-tier architecture.
+📌 Vẽ cái gì:
+Người dùng → Browser (Angular App).
+Angular (FE) → Spring Boot (BE, API).
+Spring Boot → MySQL (DB).
+(Có thể thêm: Docker, Server, Cloud nếu triển khai).
+📌 Công cụ web:
+draw.io
+Creately
+Lucidchart
+
+=========================================================================================
+
+📌 Tóm lại:
+Use Case, Activity, Class, ERD, Kiến trúc hệ thống → dùng draw.io / Lucidchart.
+UI (Figma) → dùng Figma (chuyên nghiệp nhất).
+
+=========================================================================================
+
+🟢 1. Use Case Diagram
+Actor:
+Sinh viên
+Giảng viên
+Admin
+Use Case chính:
+Sinh viên: đăng nhập, đăng ký môn, xem điểm.
+Giảng viên: đăng nhập, quản lý lớp, nhập điểm.
+Admin: quản lý tài khoản, phân quyền, quản lý môn học.
+👉 Vẽ: Hình người (actor) + oval (use case) + đường kết nối.
+
+=========================================================================================
+
+🟢 2. Activity Diagram
+Chọn vài chức năng tiêu biểu để vẽ, ví dụ:
+Đăng nhập:
+Start → nhập username/password → kiểm tra DB → đúng → vào dashboard / sai → báo lỗi.
+Sinh viên đăng ký môn:
+Start → chọn môn → kiểm tra điều kiện (còn slot không?) → ghi vào bảng Enrollments → thành công.
+👉 Vẽ: hình tròn (Start), mũi tên, hình thoi (điều kiện), hình chữ nhật (hoạt động).
+
+=========================================================================================
+
+🟢 3. ERD (Entity Relationship Diagram)
+Các bảng cơ bản:
+students (student_id, name, dob, email, class_id…)
+teachers (teacher_id, name, email…)
+courses (course_id, course_name, credit, teacher_id)
+enrollments (student_id, course_id, grade) → bảng trung gian n-n.
+accounts (account_id, username, password, role).
+👉 Quan hệ chính:
+1 sinh viên → nhiều enrollments.
+1 giảng viên → nhiều courses.
+1 course → nhiều enrollments.
+1 account → thuộc 1 người dùng (student/teacher/admin).
+
+=========================================================================================
+
+🟢 4. Class Diagram
+Theo mô hình Spring Boot MVC:
+Entity classes: Student, Teacher, Course, Enrollment, Account.
+Repository: StudentRepository, CourseRepository…
+Service: StudentService, CourseService…
+Controller: StudentController, CourseController…
+👉 Vẽ: Hình chữ nhật 3 ngăn (Tên lớp / thuộc tính / phương thức) + mối quan hệ (association, dependency).
+
+=========================================================================================
+
+🟢 5. Figma (UI)
+Các màn hình cần có:
+Login.
+Dashboard (sidebar menu).
+Quản lý sinh viên (list + CRUD form).
+Quản lý môn học.
+Nhập điểm (giảng viên).
+Xem điểm (sinh viên).
+👉 Mẹo: Dùng màu chủ đạo xanh dương (theo web bán sách của bạn trước đây cho đồng bộ nhận diện).
+
+=========================================================================================
+
+🟢 6. Sơ đồ kiến trúc hệ thống
+Mô hình 3 tầng:
+Người dùng
+   ↓
+[Frontend: Angular + Vite] 
+   ↓ (REST API JSON)
+[Backend: Spring Boot] 
+   ↓ (JPA/Hibernate)
+[Database: MySQL]
+👉 Nếu muốn nâng cấp: thêm Docker, hoặc Server (Tomcat/Cloud) trong sơ đồ.

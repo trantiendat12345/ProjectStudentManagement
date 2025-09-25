@@ -1,0 +1,20 @@
+Để tránh lỗi FK và đảm bảo thứ tự tạo bảng đúng, bạn nên tạo từ bảng “cơ sở” rồi đến bảng “liên kết”. Với schema hiện tại, thứ tự hợp lý sẽ là:
+academic_terms – bảng thuật ngữ học.
+rooms – bảng phòng học.
+departments – bảng khoa.
+majors – phụ thuộc departments.
+student_classes – phụ thuộc majors.
+teachers – phụ thuộc majors.
+students – phụ thuộc student_classes, teachers (advisor).
+subjects – bảng môn học, độc lập.
+roles – bảng vai trò hệ thống.
+accounts – phụ thuộc roles, students, teachers.
+class_sections – phụ thuộc subjects, teachers, academic_terms, rooms.
+teaching – phụ thuộc teachers, subjects, academic_terms.
+class_schedules – phụ thuộc class_sections, rooms.
+enrollments – phụ thuộc students, class_sections.
+grade_components – phụ thuộc enrollments.
+assessment_weights – phụ thuộc class_sections.
+payments – phụ thuộc students.
+audit_logs – phụ thuộc accounts.
+⚡ Lưu ý: Khi tạo bảng, nếu MySQL gặp FK chưa tồn tại, sẽ báo lỗi. Tạo theo thứ tự này sẽ tránh lỗi FK.
