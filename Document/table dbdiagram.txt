@@ -10,7 +10,7 @@ table Roles {
 
 table Accounts {
   id Long [primary key]
-  username varchar
+  email varchar
   password varchar
   role_id Long
   student_id Long
