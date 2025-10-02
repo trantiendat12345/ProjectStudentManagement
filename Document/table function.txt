@@ -1,0 +1,178 @@
+1. Roles
+📌 Quản lý các vai trò trong hệ thống.
+id: Khóa chính.
+role_name: Tên vai trò (Admin, Teacher, Student…).
+is_deleted, deleted_at, deleted_by: Dùng cho xóa mềm.
+created_at, updated_at: Quản lý thời gian tạo và cập nhật.
+2. Accounts
+📌 Quản lý tài khoản đăng nhập.
+id: Khóa chính.
+username: Tên đăng nhập (unique).
+password: Mật khẩu (hash).
+role_id: FK → Roles, xác định quyền.
+student_id: Nếu tài khoản thuộc sinh viên → FK đến Students.
+teacher_id: Nếu tài khoản thuộc giảng viên → FK đến Teachers.
+is_active: Tài khoản đang hoạt động hay bị khóa.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+3. Academic_Terms
+📌 Quản lý học kỳ.
+id: Khóa chính.
+year: Năm học (2025, 2026…).
+semester: Học kỳ (1, 2, hè).
+start_date, end_date: Ngày bắt đầu/kết thúc.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+4. Rooms
+📌 Quản lý phòng học.
+id: Khóa chính.
+building: Tòa nhà (A, B, C…).
+room_number: Số phòng (101, 202…).
+capacity: Sức chứa.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+5. Departments
+📌 Quản lý khoa.
+id: Khóa chính.
+department_name: Tên khoa (Công nghệ thông tin, Kinh tế…).
+note: Ghi chú.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+6. Majors
+📌 Quản lý ngành học.
+id: Khóa chính.
+department_id: FK → Departments, ngành thuộc khoa nào.
+major_name: Tên ngành (Khoa học máy tính, Quản trị kinh doanh…).
+note: Ghi chú.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+7. Student_Classes
+📌 Quản lý lớp hành chính.
+id: Khóa chính.
+major_id: FK → Majors, lớp thuộc ngành nào.
+class_name: Tên lớp (22CNTT1, 23QTKD2…).
+academic_year: Niên khóa (2022–2026).
+note: Ghi chú.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+8. Teachers
+📌 Quản lý giảng viên.
+id: Khóa chính.
+teacher_code: Mã giảng viên (GV001).
+major_id: FK → Majors, giảng viên thuộc ngành nào.
+full_name: Họ tên.
+gender: Giới tính.
+date_of_birth: Ngày sinh.
+email: Email liên hệ.
+identity_number: CMND/CCCD.
+phone: SĐT.
+address: Địa chỉ.
+image_url: Ảnh đại diện.
+status: Trạng thái (đang giảng dạy, nghỉ phép…).
+note: Ghi chú.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+9. Students
+📌 Quản lý sinh viên.
+id: Khóa chính.
+student_code: Mã SV (SV001).
+class_id: FK → Student_Classes, sinh viên thuộc lớp nào.
+full_name: Họ tên.
+gender: Giới tính.
+date_of_birth: Ngày sinh.
+email: Email liên hệ.
+identity_number: CMND/CCCD.
+phone: SĐT.
+address: Địa chỉ.
+image_url: Ảnh đại diện.
+academic_year: Niên khóa (2022–2026).
+status: Trạng thái (đang học, bảo lưu, tốt nghiệp…).
+advisor_id: FK → Teachers, giảng viên cố vấn.
+note: Ghi chú.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+10. Subjects
+📌 Danh sách môn học.
+id: Khóa chính.
+subject_code: Mã môn học (CT101).
+subject_name: Tên môn học (Lập trình Java).
+credit: Số tín chỉ.
+note: Ghi chú.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+11. Teaching
+📌 Liên kết GV – Môn – Học kỳ.
+id: Khóa chính.
+teacher_id: FK → Teachers, giảng viên nào.
+subject_id: FK → Subjects, dạy môn nào.
+term_id: FK → Academic_Terms, trong kỳ nào.
+note: Ghi chú.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+12. Class_Sections
+📌 Lớp học phần (môn học mở trong một kỳ).
+id: Khóa chính.
+subject_id: FK → Subjects.
+teacher_id: FK → Teachers.
+term_id: FK → Academic_Terms.
+room_id: FK → Rooms.
+max_student: Giới hạn số SV.
+schedule: Lịch học tổng quan.
+note: Ghi chú.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+13. Class_Schedules
+📌 Thời khóa biểu chi tiết.
+id: Khóa chính.
+class_section_id: FK → Class_Sections.
+day_of_week: Thứ trong tuần.
+start_time, end_time: Giờ học.
+room_id: FK → Rooms.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+14. Enrollments
+📌 Sinh viên đăng ký học phần.
+id: Khóa chính.
+student_id: FK → Students.
+class_section_id: FK → Class_Sections.
+status: Trạng thái (đang học, rút môn, hoàn thành…).
+note: Ghi chú.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+15. Grade_Components
+📌 Điểm chi tiết cho từng phần.
+id: Khóa chính.
+enrollment_id: FK → Enrollments.
+component: Thành phần (midterm, final, project…).
+score: Điểm số.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+16. Assessment_Weights
+📌 Trọng số chấm điểm.
+id: Khóa chính.
+class_section_id: FK → Class_Sections.
+component: Thành phần điểm.
+weight: Trọng số (0.3, 0.5…).
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+17. Payments
+📌 Học phí.
+id: Khóa chính.
+student_id: FK → Students.
+amount: Số tiền.
+description: Mô tả (học phí HK1, lệ phí…).
+status: Trạng thái (đã nộp, chưa nộp).
+paid_at: Ngày thanh toán.
+is_deleted, deleted_at, deleted_by: Xóa mềm.
+created_at, updated_at: Thời gian tạo, cập nhật.
+18. Audit_Logs
+📌 Lịch sử thao tác.
+id: Khóa chính.
+account_id: FK → Accounts, người thực hiện hành động.
+action: Hành động (INSERT, UPDATE, DELETE).
+table_name: Tên bảng bị tác động.
+record_id: ID bản ghi bị tác động.
+old_data: Dữ liệu cũ (JSON).
+new_data: Dữ liệu mới (JSON).
+created_at: Thời điểm hành động.
+created_by: Ai tạo log (thường chính là account_id).

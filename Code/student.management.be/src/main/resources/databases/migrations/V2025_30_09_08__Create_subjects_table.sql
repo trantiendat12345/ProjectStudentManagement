@@ -1,0 +1,14 @@
+CREATE TABLE subjects (
+    subjects_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    subjects_code VARCHAR(20) NOT NULL UNIQUE,
+    subjects_name VARCHAR(100) NOT NULL,
+    credits SMALLINT UNSIGNED NOT NULL DEFAULT 2,
+    note TEXT,
+    is_deleted TINYINT(1) NOT NULL DEFAULT 0,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    deleted_by BIGINT UNSIGNED NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    -- CONSTRAINT fk_subjects_deleted_by FOREIGN KEY (deleted_by) REFERENCES accounts(accounts_id)
+);

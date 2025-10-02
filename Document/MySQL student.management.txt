@@ -14,7 +14,7 @@ USE student_management;
 -- 1) Roles (create first)
 -- =========================
 CREATE TABLE IF NOT EXISTS `roles` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `id` INT UNSIGNED NOT NULL,
   `role_name` VARCHAR(50) NOT NULL,
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
   `deleted_at` TIMESTAMP NULL DEFAULT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_role_name` (`role_name`),
+  UNIQUE KEY `uq_role_name` (`role_name`, `id`),
   KEY `idx_roles_is_deleted` (`is_deleted`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -141,6 +141,7 @@ CREATE TABLE IF NOT EXISTS `majors` (
 -- =========================
 CREATE TABLE IF NOT EXISTS `student_classes` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `department_id` BIGINT UNSIGNED,
   `major_id` BIGINT UNSIGNED,
   `class_name` VARCHAR(100) NOT NULL,
   `academic_year` VARCHAR(30),
@@ -154,6 +155,7 @@ CREATE TABLE IF NOT EXISTS `student_classes` (
   UNIQUE KEY `uq_class_name_year` (`class_name`,`academic_year`),
   KEY `major_id`,
   KEY `idx_student_classes_is_deleted` (`is_deleted`),
+  CONSTRAINT `fk_student_classes_departments` FOREIGN KEY (`department_id`) REFERENCES `departments`(`id`),
   CONSTRAINT `fk_classes_major` FOREIGN KEY (`major_id`) REFERENCES `majors`(`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_student_classes_deleted_by_accounts` FOREIGN KEY (`deleted_by`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -73,6 +73,7 @@ table Majors {
 
 table Student_Classes {
   id Long [primary key]
+  department_id Long
   major_id Long
   class_name varchar
   academic_year varchar
@@ -264,6 +265,8 @@ Ref: Departments.deleted_by - Accounts.id
 Ref: Majors.department_id > Departments.id
 
 Ref: Majors.deleted_by - Accounts.id
+
+Ref: Student_Classes.department_id > Departments.id
 
 Ref: Student_Classes.major_id > Majors.id
 
