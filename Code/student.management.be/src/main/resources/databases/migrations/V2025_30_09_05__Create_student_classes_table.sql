@@ -8,7 +8,7 @@ CREATE TABLE student_classes (
     deleted_at TIMESTAMP NULL DEFAULT NULL,
     deleted_by BIGINT UNSIGNED NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 
     -- CONSTRAINT fk_student_classes_department_id FOREIGN KEY (department_id) REFERENCES departments(departments_id),
     -- CONSTRAINT fk_student_classes_major_id FOREIGN KEY (major_id) REFERENCES majors(majors_id),

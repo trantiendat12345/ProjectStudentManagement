@@ -8,7 +8,7 @@ CREATE TABLE teaching (
     deleted_at TIMESTAMP NULL DEFAULT NULL,
     deleted_by BIGINT UNSIGNED NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 
     -- CONSTRAINT fk_teaching_teacher_id FOREIGN KEY (teacher_id) REFERENCES teachers(teachers_id),
     -- CONSTRAINT fk_teaching_subject_id FOREIGN KEY (subject_id) REFERENCES subjects(subjects_id),

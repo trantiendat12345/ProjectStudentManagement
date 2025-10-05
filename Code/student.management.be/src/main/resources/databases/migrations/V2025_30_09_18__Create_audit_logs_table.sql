@@ -7,7 +7,7 @@ CREATE TABLE audit_logs (
     old_values JSON,
     new_values JSON,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by BIGINT UNSIGNED NOT NULL,
+    created_by BIGINT UNSIGNED NOT NULL
 
     -- CONSTRAINT fk_audit_logs_accounts_id FOREIGN KEY (accounts_id) REFERENCES accounts(accounts_id),
     -- CONSTRAINT fk_audit_logs_created_by FOREIGN KEY (created_by) REFERENCES accounts(accounts_id)

@@ -7,7 +7,7 @@ CREATE TABLE grade_components (
     deleted_at TIMESTAMP NULL DEFAULT NULL,
     deleted_by BIGINT UNSIGNED NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 
     -- CONSTRAINT fk_grade_components_enrollment_id FOREIGN KEY (enrollment_id) REFERENCES enrollments(enrollments_id),
     -- CONSTRAINT fk_grade_components_deleted_by FOREIGN KEY (deleted_by) REFERENCES accounts(accounts_id)
