@@ -18,9 +18,9 @@ CREATE TABLE students (
     deleted_at TIMESTAMP NULL DEFAULT NULL,
     deleted_by BIGINT UNSIGNED NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    -- CONSTRAINT fk_students_class_id FOREIGN KEY (class_id) REFERENCES student_classes(student_classes_id),
-    -- CONSTRAINT fk_students_advisor_id FOREIGN KEY (advisor_id) REFERENCES teachers(teachers_id),
+    CONSTRAINT fk_students_class_id FOREIGN KEY (class_id) REFERENCES student_classes(student_classes_id),
+    CONSTRAINT fk_students_advisor_id FOREIGN KEY (advisor_id) REFERENCES teachers(teachers_id)
     -- CONSTRAINT fk_students_deleted_by FOREIGN KEY (deleted_by) REFERENCES accounts(accounts_id)
 );

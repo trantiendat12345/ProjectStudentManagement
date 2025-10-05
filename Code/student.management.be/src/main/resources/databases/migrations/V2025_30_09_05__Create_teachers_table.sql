@@ -16,8 +16,8 @@ CREATE TABLE teachers (
     deleted_at TIMESTAMP NULL DEFAULT NULL,
     deleted_by BIGINT UNSIGNED NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    -- CONSTRAINT fk_teachers_major_id FOREIGN KEY (major_id) REFERENCES majors(majors_id),
+    CONSTRAINT fk_teachers_major_id FOREIGN KEY (major_id) REFERENCES majors(majors_id)
     -- CONSTRAINT fk_teachers_deleted_by FOREIGN KEY (deleted_by) REFERENCES accounts(accounts_id)
 );

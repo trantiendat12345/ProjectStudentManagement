@@ -4,11 +4,11 @@ CREATE TABLE audit_logs (
     action VARCHAR(255),
     table_name VARCHAR(100) NOT NULL,
     record_id BIGINT UNSIGNED NOT NULL,
-    old_values JSON,
-    new_values JSON,
+    old_values TEXT ,
+    new_values TEXT ,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by BIGINT UNSIGNED NOT NULL
+    created_by BIGINT UNSIGNED NOT NULL,
 
-    -- CONSTRAINT fk_audit_logs_accounts_id FOREIGN KEY (accounts_id) REFERENCES accounts(accounts_id),
-    -- CONSTRAINT fk_audit_logs_created_by FOREIGN KEY (created_by) REFERENCES accounts(accounts_id)
+    CONSTRAINT fk_audit_logs_accounts_id FOREIGN KEY (accounts_id) REFERENCES accounts(accounts_id),
+    CONSTRAINT fk_audit_logs_created_by FOREIGN KEY (created_by) REFERENCES accounts(accounts_id)
 );

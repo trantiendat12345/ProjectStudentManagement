@@ -9,9 +9,9 @@ CREATE TABLE class_schedules (
     deleted_at TIMESTAMP NULL DEFAULT NULL,
     deleted_by BIGINT UNSIGNED NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    -- CONSTRAINT fk_class_schedules_class_section_id FOREIGN KEY (class_section_id) REFERENCES class_sections(class_sections_id),
-    -- CONSTRAINT fk_class_schedules_room_id FOREIGN KEY (room_id) REFERENCES rooms(rooms_id),
-    -- CONSTRAINT fk_class_schedules_deleted_by FOREIGN KEY (deleted_by) REFERENCES accounts(accounts_id)
+    CONSTRAINT fk_class_schedules_class_section_id FOREIGN KEY (class_section_id) REFERENCES class_sections(class_sections_id),
+    CONSTRAINT fk_class_schedules_room_id FOREIGN KEY (room_id) REFERENCES rooms(rooms_id),
+    CONSTRAINT fk_class_schedules_deleted_by FOREIGN KEY (deleted_by) REFERENCES accounts(accounts_id)
 );
