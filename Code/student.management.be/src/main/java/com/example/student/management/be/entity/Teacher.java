@@ -7,7 +7,7 @@ import java.util.List;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.example.student.management.be.util.enums.Gender;
-import com.example.student.management.be.util.enums.StudentStatus;
+import com.example.student.management.be.util.enums.TeacherStatus;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,68 +30,64 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "students")
+@Table(name = "teachers")
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLRestriction("is_delete = false")
-public class Student {
+public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "students_id")
-    private Long studentId;
+    @Column(name = "teachers_id")
+    private Long teacherId;
 
-    @Column(name = "student_code", nullable = false, unique = true)
-    private String studentCode;
+    @Column(name = "teacher_code", nullable = false, unique = true)
+    private String teacherCode;
 
     @ManyToOne
-    @JoinColumn(name = "class_id", referencedColumnName = "student_classes_id", nullable = false)
-    private StudentClass studentClassId;
+    @JoinColumn(name = "major_id", referencedColumnName = "majors_id", nullable = false)
+    private Major majorId;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "gender")
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-    
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
-
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "identity_number", unique = true)
-    private String identityNumber;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
 
     @Column(name = "phone", unique = true)
     private String phone;
 
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
     @Column(name = "address")
     private String address;
-
-    @Column(name = "image_url")
-    private String imageUrl;
-
-    @Column(name = "academic_year")
-    private Integer academicYear;
-
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private StudentStatus status;
-
-    @ManyToOne
-    @JoinColumn(name = "advisor_id", referencedColumnName = "teachers_id")
-    private Teacher teacherId;
 
     @Column(name = "note")
     private String note;
 
-    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL)
-    private List<Enrollment> listEnrollments;
+    @Column(name = "identity_number", unique = true)
+    private String identityNumber;
 
-    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL)
-    private List<Payment> listPayments;
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private TeacherStatus status;
+
+    @OneToMany(mappedBy = "teacherId", cascade = CascadeType.ALL)
+    private List<Student> listStudents;
+
+    @OneToMany(mappedBy = "teacherId", cascade = CascadeType.ALL)
+    private List<Teaching> listTeachings;
+
+    @OneToMany(mappedBy = "teacherId", cascade = CascadeType.ALL)
+    private List<ClassSection> listClassSections;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;

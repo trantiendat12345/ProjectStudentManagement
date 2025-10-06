@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
@@ -23,47 +24,36 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "accounts")
+@Table(name = "majors")
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLRestriction("is_delete = false")
-public class Account {
+public class Major {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "accounts_id")
-    private Long accountId;
+    @Column(name = "majors_id")
+    private Long majorId;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "department_id", referencedColumnName = "departments_id", nullable = false)
+    private Department departmentId;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "major_name", nullable = false, unique = true)
+    private String majorName;
 
-    @OneToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "roles_id", nullable = false)
-    private Role roleId;
+    @Column(name = "note")
+    private String note;
 
-    @OneToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "students_id")
-    private Student studentId;
+    @OneToMany(mappedBy = "majorId", cascade = CascadeType.ALL)
+    private List<StudentClass> listStudentClasses;
 
-    @OneToOne
-    @JoinColumn(name = "teacher_id", referencedColumnName = "teachers_id")
-    private Teacher teacherId;
-
-    @Column(name = "is_active", nullable = false)
-    private boolean isActive;
-
-    @OneToMany(mappedBy = "accountId", cascade = CascadeType.ALL)
-    private List<AuditLog> listAuditLogs;
-
-    @OneToMany(mappedBy = "accountIdCreate", cascade = CascadeType.ALL)
-    private List<AuditLog> listAuditLogsCreate;
+    @OneToMany(mappedBy = "majorId", cascade = CascadeType.ALL)
+    private List<Teacher> listTeachers;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
-
+    
     @OneToOne
     @JoinColumn(name = "deleted_by", referencedColumnName = "accounts_id")
     private Account deletedBy;

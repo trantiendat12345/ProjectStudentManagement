@@ -1,18 +1,20 @@
 package com.example.student.management.be.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
 
-import jakarta.persistence.CascadeType;
+import com.example.student.management.be.util.enums.Paymentstatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -23,47 +25,37 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "accounts")
+@Table(name = "payments")
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLRestriction("is_delete = false")
-public class Account {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "accounts_id")
-    private Long accountId;
+    @Column(name = "payments_id")
+    private Long paymentId;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @OneToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "roles_id", nullable = false)
-    private Role roleId;
-
-    @OneToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "students_id")
+    @ManyToOne
+    @JoinColumn(name = "student_id", referencedColumnName = "students_id", nullable = false)
     private Student studentId;
 
-    @OneToOne
-    @JoinColumn(name = "teacher_id", referencedColumnName = "teachers_id")
-    private Teacher teacherId;
+    @Column(name = "amount")
+    private float amount;
 
-    @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    @Column(name = "description")
+    private String description;
 
-    @OneToMany(mappedBy = "accountId", cascade = CascadeType.ALL)
-    private List<AuditLog> listAuditLogs;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Paymentstatus status;
 
-    @OneToMany(mappedBy = "accountIdCreate", cascade = CascadeType.ALL)
-    private List<AuditLog> listAuditLogsCreate;
+    @Column(name = "paid_at")
+    private LocalDateTime paidAt;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
-
+    
     @OneToOne
     @JoinColumn(name = "deleted_by", referencedColumnName = "accounts_id")
     private Account deletedBy;

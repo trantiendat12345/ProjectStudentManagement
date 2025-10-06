@@ -1,13 +1,18 @@
 package com.example.student.management.be.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
 
+import com.example.student.management.be.util.enums.Semester;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,47 +28,39 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "accounts")
+@Table(name = "academic_terms")
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLRestriction("is_delete = false")
-public class Account {
+public class AcademicTerm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "accounts_id")
-    private Long accountId;
+    @Column(name = "academic_terms_id")
+    private Long academicTermId;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
+    @Column(name = "year", nullable = false)
+    private int year;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "semester")
+    private Semester semester;
 
-    @OneToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "roles_id", nullable = false)
-    private Role roleId;
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
 
-    @OneToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "students_id")
-    private Student studentId;
+    @Column(name = "end_date", nullable = false)
+    private LocalDate endDate;
 
-    @OneToOne
-    @JoinColumn(name = "teacher_id", referencedColumnName = "teachers_id")
-    private Teacher teacherId;
+    @OneToMany(mappedBy = "academicTermId", cascade = CascadeType.ALL)
+    private List<Teaching> listTeachings;
 
-    @Column(name = "is_active", nullable = false)
-    private boolean isActive;
-
-    @OneToMany(mappedBy = "accountId", cascade = CascadeType.ALL)
-    private List<AuditLog> listAuditLogs;
-
-    @OneToMany(mappedBy = "accountIdCreate", cascade = CascadeType.ALL)
-    private List<AuditLog> listAuditLogsCreate;
+    @OneToMany(mappedBy = "academicTermId", cascade = CascadeType.ALL)
+    private List<ClassSection> listClassSections;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
-
+    
     @OneToOne
     @JoinColumn(name = "deleted_by", referencedColumnName = "accounts_id")
     private Account deletedBy;

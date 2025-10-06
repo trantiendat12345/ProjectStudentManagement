@@ -23,47 +23,38 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "accounts")
+@Table(name = "subjects")
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLRestriction("is_delete = false")
-public class Account {
+public class Subject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "accounts_id")
-    private Long accountId;
+    @Column(name = "subjects_id")
+    private Long subjectId;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
+    @Column(name = "subject_code", nullable = false, unique = true)
+    private String subjectCode;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "subject_name", nullable = false)
+    private String subjectName;
 
-    @OneToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "roles_id", nullable = false)
-    private Role roleId;
+    @Column(name = "creadits", nullable = false)
+    private short creadits;
 
-    @OneToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "students_id")
-    private Student studentId;
+    @Column(name = "note")
+    private String note;
 
-    @OneToOne
-    @JoinColumn(name = "teacher_id", referencedColumnName = "teachers_id")
-    private Teacher teacherId;
+    @OneToMany(mappedBy = "subjectId", cascade = CascadeType.ALL)
+    private List<Teaching> listsSubjects;
 
-    @Column(name = "is_active", nullable = false)
-    private boolean isActive;
-
-    @OneToMany(mappedBy = "accountId", cascade = CascadeType.ALL)
-    private List<AuditLog> listAuditLogs;
-
-    @OneToMany(mappedBy = "accountIdCreate", cascade = CascadeType.ALL)
-    private List<AuditLog> listAuditLogsCreate;
+    @OneToMany(mappedBy = "subjectId", cascade = CascadeType.ALL)
+    private List<ClassSection> listClassSections;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
-
+    
     @OneToOne
     @JoinColumn(name = "deleted_by", referencedColumnName = "accounts_id")
     private Account deletedBy;

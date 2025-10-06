@@ -8,7 +8,7 @@ CREATE TABLE enrollments (
     deleted_at TIMESTAMP NULL DEFAULT NULL,
     deleted_by BIGINT UNSIGNED NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_enrollments_student_id FOREIGN KEY (student_id) REFERENCES students(students_id),
     CONSTRAINT fk_enrollments_class_section_id FOREIGN KEY (class_section_id) REFERENCES class_sections(class_sections_id),

@@ -1,4 +1,4 @@
-package com.example.student.management.be.constant;
+package com.example.student.management.be.util.uri;
 
 public class URI {
 
