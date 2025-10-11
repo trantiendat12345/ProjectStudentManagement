@@ -2,8 +2,6 @@ package com.example.student.management.be.entity;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.SQLRestriction;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,7 +20,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "audit_logs")
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLRestriction("is_deleted = false")
 public class AuditLog {
 
     @Id
