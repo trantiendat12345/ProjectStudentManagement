@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "academic_terms")
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLRestriction("is_delete = false")
+@SQLRestriction("is_deleted = false")
 public class AcademicTerm {
 
     @Id

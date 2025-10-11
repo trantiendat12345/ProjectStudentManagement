@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "assessment_weights")
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLRestriction("is_delete = false")
+@SQLRestriction("is_deleted = false")
 public class AssessmentWeight {
 
     @Id

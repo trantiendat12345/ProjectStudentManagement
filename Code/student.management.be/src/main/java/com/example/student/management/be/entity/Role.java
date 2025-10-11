@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "roles")
 @Data
-@SQLRestriction("is_delete = false")
+@SQLRestriction("is_deleted = false")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Role {

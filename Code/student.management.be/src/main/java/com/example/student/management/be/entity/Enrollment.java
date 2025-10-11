@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "enrollments")
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLRestriction("is_delete = false")
+@SQLRestriction("is_deleted = false")
 public class Enrollment {
 
     @Id

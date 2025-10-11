@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "grade_components")
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLRestriction("is_delete = false")
+@SQLRestriction("is_deleted = false")
 public class GradeComponent {
 
     @Id

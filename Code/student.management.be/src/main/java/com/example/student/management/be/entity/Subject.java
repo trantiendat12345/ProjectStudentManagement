@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "subjects")
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLRestriction("is_delete = false")
+@SQLRestriction("is_deleted = false")
 public class Subject {
 
     @Id

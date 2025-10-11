@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "payments")
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLRestriction("is_delete = false")
+@SQLRestriction("is_deleted = false")
 public class Payment {
 
     @Id

@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "audit_logs")
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLRestriction("is_delete = false")
+@SQLRestriction("is_deleted = false")
 public class AuditLog {
 
     @Id
