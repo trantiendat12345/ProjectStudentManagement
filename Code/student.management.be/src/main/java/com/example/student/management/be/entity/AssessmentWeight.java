@@ -6,6 +6,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +33,7 @@ public class AssessmentWeight {
     @Column(name = "assessment_weights_id")
     private Long assessmentWeightId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_section_id", referencedColumnName = "class_sections_id", nullable = false)
     private ClassSection classSectionId;
 

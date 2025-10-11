@@ -14,6 +14,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,7 +45,7 @@ public class Student {
     @Column(name = "student_code", nullable = false, unique = true)
     private String studentCode;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id", referencedColumnName = "student_classes_id", nullable = false)
     private StudentClass studentClassId;
 
@@ -80,7 +81,7 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private StudentStatus status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "advisor_id", referencedColumnName = "teachers_id")
     private Teacher teacherId;
 
