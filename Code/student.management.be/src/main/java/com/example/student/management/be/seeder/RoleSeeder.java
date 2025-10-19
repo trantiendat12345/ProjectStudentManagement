@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.student.management.be.constant.RoleConstant;
 import com.example.student.management.be.entity.Role;
 import com.example.student.management.be.repository.RoleRepository;
 
@@ -28,17 +29,17 @@ public class RoleSeeder implements CommandLineRunner {
         if (isEmptyTable()) {
             Role admin = new Role();
             admin.setRoleId(1);
-            admin.setRoleName("ADMIN");
+            admin.setRoleName(RoleConstant.ADMIN_NAME);
             roleRepository.save(admin);
 
             Role student = new Role();
             student.setRoleId(3);
-            student.setRoleName("STUDENT");
+            student.setRoleName(RoleConstant.STUDENT_NAME);
             roleRepository.save(student);
 
             Role teacher = new Role();
             teacher.setRoleId(2);
-            teacher.setRoleName("TEACHER");
+            teacher.setRoleName(RoleConstant.TEACHER_NAME);
             roleRepository.save(teacher);
         }
     }
