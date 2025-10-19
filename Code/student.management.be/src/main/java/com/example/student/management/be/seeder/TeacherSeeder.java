@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 import com.example.student.management.be.constant.MajorConstant;
 import com.example.student.management.be.constant.TeacherConstant;
+import com.example.student.management.be.constant.enums.TeacherStatus;
 import com.example.student.management.be.entity.Teacher;
 import com.example.student.management.be.repository.MajorRepository;
 import com.example.student.management.be.repository.TeacherRepository;
 import com.example.student.management.be.seeder.base.RandomListName;
-import com.example.student.management.be.util.enums.TeacherStatus;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

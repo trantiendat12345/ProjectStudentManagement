@@ -1,4 +1,4 @@
-package com.example.student.management.be.util.enums;
+package com.example.student.management.be.constant.enums;
 
 public enum StudentStatus {
     

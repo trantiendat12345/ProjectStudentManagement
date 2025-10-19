@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.SQLRestriction;
 
-import com.example.student.management.be.util.enums.Paymentstatus;
+import com.example.student.management.be.constant.enums.Paymentstatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,6 +1,6 @@
 package com.example.student.management.be.response;
 
-import com.example.student.management.be.resource.StudentResource;
+import com.example.student.management.be.resource.LoginResource;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +10,6 @@ import lombok.Getter;
 public class LoginResponse {
 
     private final String token;
-    private final StudentResource student;
+    private final LoginResource infLoginResource;
     
 }

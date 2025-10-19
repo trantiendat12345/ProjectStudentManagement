@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
 
-import com.example.student.management.be.util.enums.Semester;
+import com.example.student.management.be.constant.enums.Semester;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

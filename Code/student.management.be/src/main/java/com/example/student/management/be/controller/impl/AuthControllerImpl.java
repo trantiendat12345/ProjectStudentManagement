@@ -2,7 +2,6 @@ package com.example.student.management.be.controller.impl;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.student.management.be.controller.BaseController;
 import com.example.student.management.be.controller.interfaces.AuthController;
@@ -21,7 +20,7 @@ public class AuthControllerImpl extends BaseController implements AuthController
     }
 
     @Override
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(LoginRequest request) {
 
         LoginResponse response = authService.login(request);
         

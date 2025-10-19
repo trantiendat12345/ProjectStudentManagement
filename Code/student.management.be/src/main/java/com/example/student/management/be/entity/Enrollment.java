@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
 
-import com.example.student.management.be.util.enums.EnrollmentStatus;
+import com.example.student.management.be.constant.enums.EnrollmentStatus;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
