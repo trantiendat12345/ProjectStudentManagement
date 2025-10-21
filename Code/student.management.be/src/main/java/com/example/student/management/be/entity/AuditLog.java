@@ -27,7 +27,7 @@ public class AuditLog {
     @Column(name = "audit_logs_id")
     private Long auditLogId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "accounts_id", referencedColumnName = "accounts_id", nullable = false)
     private Account accountId;
 
@@ -49,7 +49,7 @@ public class AuditLog {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by", referencedColumnName = "accounts_id", nullable = false)
     private Account accountIdCreate;
     

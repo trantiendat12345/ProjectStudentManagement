@@ -16,7 +16,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -37,11 +36,11 @@ public class ClassSchedule {
     @Column(name = "class_schedules_id")
     private Long classScheduleId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "class_section_id", referencedColumnName = "class_sections_id", nullable = false)
     private ClassSection classSectionId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id", referencedColumnName = "rooms_id", nullable = false)
     private Room roomId;
 
@@ -58,7 +57,7 @@ public class ClassSchedule {
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
     
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "deleted_by", referencedColumnName = "accounts_id")
     private Account deletedBy;
 

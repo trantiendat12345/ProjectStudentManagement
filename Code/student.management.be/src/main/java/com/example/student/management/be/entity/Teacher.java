@@ -21,7 +21,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -45,7 +44,7 @@ public class Teacher {
     @Column(name = "teacher_code", nullable = false, unique = true)
     private String teacherCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "major_id", referencedColumnName = "majors_id", nullable = false)
     private Major majorId;
 
@@ -81,19 +80,19 @@ public class Teacher {
     @Column(name = "status", nullable = false)
     private TeacherStatus status;
 
-    @OneToMany(mappedBy = "teacherId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "teacherId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Student> listStudents;
 
-    @OneToMany(mappedBy = "teacherId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "teacherId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Teaching> listTeachings;
 
-    @OneToMany(mappedBy = "teacherId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "teacherId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ClassSection> listClassSections;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
     
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "deleted_by", referencedColumnName = "accounts_id")
     private Account deletedBy;
 

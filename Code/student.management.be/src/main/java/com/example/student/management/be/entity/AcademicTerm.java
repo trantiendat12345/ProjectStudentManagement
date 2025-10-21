@@ -13,12 +13,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -52,16 +53,16 @@ public class AcademicTerm {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "academicTermId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "academicTermId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Teaching> listTeachings;
 
-    @OneToMany(mappedBy = "academicTermId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "academicTermId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ClassSection> listClassSections;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
     
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "deleted_by", referencedColumnName = "accounts_id")
     private Account deletedBy;
 

@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -33,7 +32,7 @@ public class AssessmentWeight {
     @Column(name = "assessment_weights_id")
     private Long assessmentWeightId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "class_section_id", referencedColumnName = "class_sections_id", nullable = false)
     private ClassSection classSectionId;
 
@@ -46,7 +45,7 @@ public class AssessmentWeight {
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
     
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "deleted_by", referencedColumnName = "accounts_id")
     private Account deletedBy;
 
