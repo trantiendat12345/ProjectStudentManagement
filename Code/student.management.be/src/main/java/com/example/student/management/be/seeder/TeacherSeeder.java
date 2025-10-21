@@ -44,7 +44,7 @@ public class TeacherSeeder extends RandomListName implements CommandLineRunner {
                 teacher.setTeacherCode(TeacherConstant.CODE + i);
                 teacher.setMajorId(majorRepository.findById(1L).orElseThrow( () -> new RuntimeException(MajorConstant.MAJOR_NOT_FOUND)));
                 teacher.setFullName(listNameTeacher.get(i));
-                teacher.setEmail("teacher" + i + "@gmail.con");
+                teacher.setEmail("teacher" + i + "@gmail.com");
                 teacher.setStatus(TeacherStatus.Active);
                 teacherRepository.save(teacher);
             }
@@ -54,7 +54,7 @@ public class TeacherSeeder extends RandomListName implements CommandLineRunner {
                 teacher.setTeacherCode(TeacherConstant.CODE + i);
                 teacher.setMajorId(majorRepository.findById(2L).orElseThrow( () -> new RuntimeException(MajorConstant.MAJOR_NOT_FOUND)));
                 teacher.setFullName(listNameTeacher.get(i));
-                teacher.setEmail("teacher" + i + "@gmail.con");
+                teacher.setEmail("teacher" + i + "@gmail.com");
                 teacher.setStatus(TeacherStatus.Active);
                 teacherRepository.save(teacher);
             }
@@ -64,7 +64,7 @@ public class TeacherSeeder extends RandomListName implements CommandLineRunner {
                 teacher.setTeacherCode(TeacherConstant.CODE + i);
                 teacher.setMajorId(majorRepository.findById(3L).orElseThrow( () -> new RuntimeException(MajorConstant.MAJOR_NOT_FOUND)));
                 teacher.setFullName(listNameTeacher.get(i));
-                teacher.setEmail("teacher" + i + "@gmail.con");
+                teacher.setEmail("teacher" + i + "@gmail.com");
                 teacher.setStatus(TeacherStatus.Active);
                 teacherRepository.save(teacher);
             }
@@ -74,7 +74,7 @@ public class TeacherSeeder extends RandomListName implements CommandLineRunner {
                 teacher.setTeacherCode(TeacherConstant.CODE + i);
                 teacher.setMajorId(majorRepository.findById(4L).orElseThrow( () -> new RuntimeException(MajorConstant.MAJOR_NOT_FOUND)));
                 teacher.setFullName(listNameTeacher.get(i));
-                teacher.setEmail("teacher" + i + "@gmail.con");
+                teacher.setEmail("teacher" + i + "@gmail.com");
                 teacher.setStatus(TeacherStatus.Active);
                 teacherRepository.save(teacher);
             }
