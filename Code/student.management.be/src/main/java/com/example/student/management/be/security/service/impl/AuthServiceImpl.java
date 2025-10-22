@@ -1,15 +1,15 @@
-package com.example.student.management.be.service.impl;
+package com.example.student.management.be.security.service.impl;
 
 import org.springframework.stereotype.Service;
 
 import com.example.student.management.be.request.LoginRequest;
 import com.example.student.management.be.resource.LoginResource;
 import com.example.student.management.be.response.LoginResponse;
-import com.example.student.management.be.service.BaseService;
-import com.example.student.management.be.service.interfaces.AuthService;
+import com.example.student.management.be.security.service.BaseServiceSecurity;
+import com.example.student.management.be.security.service.interfaces.AuthService;
 
 @Service
-public class AuthServiceImpl extends BaseService implements AuthService {
+public class AuthServiceImpl extends BaseServiceSecurity implements AuthService {
 
     @Override
     public LoginResponse login(LoginRequest request) {

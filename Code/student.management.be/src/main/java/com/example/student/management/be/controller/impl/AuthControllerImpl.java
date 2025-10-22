@@ -7,7 +7,7 @@ import com.example.student.management.be.controller.BaseController;
 import com.example.student.management.be.controller.interfaces.AuthController;
 import com.example.student.management.be.request.LoginRequest;
 import com.example.student.management.be.response.LoginResponse;
-import com.example.student.management.be.service.interfaces.AuthService;
+import com.example.student.management.be.security.service.interfaces.AuthService;
 
 @Component
 public class AuthControllerImpl extends BaseController implements AuthController {
