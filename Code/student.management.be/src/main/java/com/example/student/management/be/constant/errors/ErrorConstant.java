@@ -11,5 +11,9 @@ public class ErrorConstant {
     public static final String MIN_PASSWORD = "MẬT KHẨU PHẢI CÓ ÍT NHẤT 6 KÍ TỰ";
 
     public static final String DATA_ERROR = "CÓ LỖI KHI KIỂM TRA DỮ LIỆU";
+
+    public static final String LOGIN_ERROR = "CÓ LỖI KHI ĐĂNG NHẬP";
+
+    public static final String NETWORK_ERROR = "NETWORK ERROR";
     
 }

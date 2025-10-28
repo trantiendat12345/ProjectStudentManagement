@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.student.management.be.constant.uri.URI;
 import com.example.student.management.be.request.LoginRequest;
-import com.example.student.management.be.response.LoginResponse;
 
 import jakarta.validation.Valid;
 
@@ -20,6 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface AuthController {
 
     @PostMapping(value = URI.LOGIN)
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request);
+    ResponseEntity<?> login(@Valid @RequestBody LoginRequest request);
     
 }
